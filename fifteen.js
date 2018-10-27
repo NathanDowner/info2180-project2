@@ -1,6 +1,6 @@
 window.onload = function() {
   const pieces = document.querySelectorAll('#puzzlearea div');
-  const second = document.querySelector('#puzzlearea div:nth-child(2)');
+  const second = pieces[1];
   // console.log(pieces);
 
   //add the puzzlepiece class to divs
@@ -12,9 +12,15 @@ window.onload = function() {
     for (let j = 0; j < 400; j+=100) {
       pieces[p].style.top = `${i}px`;
       pieces[p].style.left = `${j}px`;
+      //portioning the image
+      pieces[p].style.backgroundPosition = `-${j}px -${i}px`;
       p++;
     }    
   }
+
+  //assign the pics
+
+
 
 
  
