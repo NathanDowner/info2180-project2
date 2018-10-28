@@ -35,18 +35,26 @@ window.onload = function() {
   //     p.classList.add('movablepiece');
   //   }
   // });
-  // setup();
+  setup();
+  pieces.forEach(p => {
+    if(hasEmptySpace(p))
+      p.classList.add('movablepiece');
+  })
 
   
   //space them out
   function setup() {
     let p = 0
-    for (let i = 0; i < 400; i+=100) {
-      for (let j = 0; j < 400; j+=100) {
-        pieces[p].style.top = `${i}px`;
-        pieces[p].style.left = `${j}px`;
+    for (let y = 0; y < 400; y+=100) {
+      for (let x = 0; x < 400; x+=100) {
+        pieces[p].style.top = `${y}px`;
+        pieces[p].style.left = `${x}px`;
         //portioning the image
-        pieces[p].style.backgroundPosition = `-${j}px -${i}px`;
+        pieces[p].style.backgroundPosition = `-${x}px -${y}px`;
+
+        //
+        pieces[p].dataset.x = x; 
+        pieces[p].dataset.y = y; 
         p++;
       }    
     }
@@ -73,11 +81,6 @@ window.onload = function() {
       }
     });
     return true;
-  }
-
-  let emptySpace = [300,300];
-  function findEmptySpace() {
-    return 
   }
   
   
