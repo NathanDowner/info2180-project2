@@ -71,13 +71,18 @@ window.onload = function() {
     });
   }
 
-  function ifMovable() {
+  function ifMovable(e) {
     if (nextToBlank(this)) {
       this.classList.add('movablepiece');
       this.addEventListener('click', movePiece);
-    } else if (this.classList.contains('movablepiece')){
-      this.classList.toggle('movablepiece');
+    } else {
+      if (this.classList.contains('movablepiece')){
+        this.classList.toggle('movablepiece');
+        this.removeEventListener('click', movePiece);
+      }
     }
+    //for debugging
+    // console.log(`${e.target.textContent} is ${nextToBlank(this)}`);
   }
 
   function getTop(piece) {
@@ -113,7 +118,7 @@ window.onload = function() {
   }
 
   function nextToBlank(piece) {
-    console.log('Called move nextToBlank.');
+    // console.log('Called move nextToBlank.');
     let top = getTop(piece);
     let left = getLeft(piece);
     if ((top - 100 === empty.top && left === empty.left) || //above
