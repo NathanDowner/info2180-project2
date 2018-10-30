@@ -17,27 +17,26 @@ window.onload = function() {
   //     b++;
   //   }    
   // }
-
-  //blank piece
-  // const blank = document.createElement('div');
-  // blank.classList.add('puzzlepiece');
-  // blank.textContent = 'blank';
-  // blank.style.top = '300px';
-  // blank.style.left = '300px';
-  // blank.style.background = "rgba(0,0,0,0)";
-  // puzzle.appendChild(blank);
   let empty = {
     top: 300,
     left: 300
   }
 
   //add the puzzlepiece class to divs
-  pieces.forEach(p => p.classList.add('puzzlepiece'));
+
+  //**************************************************/
+  
   setup();
   layoutGrid();
-  //add movable piece
-  showMovable();
+
+  pieces.forEach(p => {
+    p.classList.add('puzzlepiece');
+    p.addEventListener('mouseover', ifMovable);
+    
+  });
   
+    
+  //**************************************************/
 
   
   //space them out
@@ -72,28 +71,45 @@ window.onload = function() {
     });
   }
 
-  function showMovable() {
-    pieces.forEach(p => {
-      if(nextToBlank(p))
-        p.classList.add('movablepiece');
-    })
+  function ifMovable() {
+    if (nextToBlank(this)) {
+      this.classList.add('movablepiece');
+      this.addEventListener('click', movePiece);
+    } else if (this.classList.contains('movablepiece')){
+      this.classList.toggle('movablepiece');
+    }
   }
 
   function getTop(piece) {
     return parseInt(piece.style.top, 10);
   }
 
+  function setTop(piece, val) {
+    piece.style.top = `${val}px`;
+  }
+
   function getLeft(piece) {
     return parseInt(piece.style.left, 10);
+  }
+
+  function setLeft(piece, val) {
+    piece.style.left = `${val}px`;
   }
   
   //pieces has space if a space around the div has no element 
   //matching the coords
 
-  function movePiece(piece) {
-    console.log("Called move piece.")
-    
-
+  function movePiece() {
+    console.log("Called movePiece.");
+    let top = getTop(this);
+    let left = getLeft(this);
+    setTop(this,empty.top);
+    setLeft(this,empty.left);
+    empty.top = top;
+    empty.left = left;
+    console.log(`empty top is: ${empty.top} \n empty left is: ${empty.left}`);
+    this.removeEventListener('click', movePiece);
+    this.classList.toggle('movablepiece');
   }
 
   function nextToBlank(piece) {
@@ -109,5 +125,7 @@ window.onload = function() {
            return false;
          }
   }
-
+//add mouseover event to each piece
+  // function adds the class if its moveable
+  //function allows piece to move if moveable
 }
