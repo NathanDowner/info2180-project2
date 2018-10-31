@@ -1,22 +1,7 @@
 window.onload = function() {
   const pieces = document.querySelectorAll('#puzzlearea div');
-  const second = pieces[1];
-  const puzzle = document.querySelector('#puzzlearea');
-  const puzzleWidth = puzzle.style.width;
-  const puzzleHeight = puzzle.style.height;
- 
-  const grid = new Array(4);
-  for (i=0;i<grid.length;i++) {
-    grid[i] = new Array(4);
-  }
-//can be deleted
-  // let b = 0;
-  // for (let i = 0; i < 4; i++) {
-  //   for (let j = 0; j < 4; j++) {
-  //     grid[i][j] = pieces[b];
-  //     b++;
-  //   }    
-  // }
+  const shuffleBtn = document.querySelector('#shufflebutton');
+
   let empty = {
     top: 300,
     left: 300
@@ -32,16 +17,15 @@ window.onload = function() {
   pieces.forEach(p => {
     p.classList.add('puzzlepiece');
     p.addEventListener('mouseover', ifMovable);
-    
   });
+  shuffleBtn.addEventListener('click', shuffle);
   
-    
   //**************************************************/
 
   
   //space them out
   function setup() {
-    console.log("called setup");
+    // console.log("called setup");
     let p = 0
     for (let y = 0; y < 400; y+=100) {
       for (let x = 0; x < 400; x+=100) {
@@ -54,14 +38,32 @@ window.onload = function() {
           pieces[p].dataset.y = y; 
           
         }
-        grid[y/100][x/100] = pieces[p];
+        // grid[y/100][x/100] = pieces[p];
         p++;
+
+        // let x = 0;
+        // let y= 0;
+        // let count = 0;
+        // for (let i=0; i<pieces.length; i++) {
+        //   pieces[i].style.top = `${y}px`;
+        //   pieces[i].style.left = `${x}px`;
+          
+        //   x +=100;
+        //   count+=1;
+        //   if (count%4) {
+        //     x = 0;
+        //     y+= 100;
+        //   }
+        // }
+
+
+
       }    
     }
   }
 
   function layoutGrid() {
-    console.log('called layoutGrid');
+    // console.log('called layoutGrid');
     pieces.forEach(p => {
       let x = p.dataset.x;
       let y = p.dataset.y;
@@ -69,6 +71,13 @@ window.onload = function() {
       p.style.top = y +'px';
       p.style.backgroundPosition = `-${x}px -${y}px`;
     });
+  }
+
+  function shuffle() {
+    for (let i = 0; i < 100; i++) {
+      let index = Math.floor(Math.random() * 14);
+      move(pieces[index]);
+    }
   }
 
   function ifMovable(e) {
@@ -100,19 +109,29 @@ window.onload = function() {
   function setLeft(piece, val) {
     piece.style.left = `${val}px`;
   }
-  
-  //pieces has space if a space around the div has no element 
-  //matching the coords
+
+  function move(piece) {
+    // console.log("Called movePiece.");
+    let top = getTop(piece);
+    let left = getLeft(piece);
+    setTop(piece,empty.top);
+    setLeft(piece,empty.left);
+    empty.top = top;
+    empty.left = left;
+    // console.log(`empty top is: ${empty.top} \n empty left is: ${empty.left}`);
+    piece.removeEventListener('click', movePiece);
+    piece.classList.toggle('movablepiece');
+  }
 
   function movePiece() {
-    console.log("Called movePiece.");
+    // console.log("Called movePiece.");
     let top = getTop(this);
     let left = getLeft(this);
     setTop(this,empty.top);
     setLeft(this,empty.left);
     empty.top = top;
     empty.left = left;
-    console.log(`empty top is: ${empty.top} \n empty left is: ${empty.left}`);
+    // console.log(`empty top is: ${empty.top} \n empty left is: ${empty.left}`);
     this.removeEventListener('click', movePiece);
     this.classList.toggle('movablepiece');
   }
@@ -130,7 +149,4 @@ window.onload = function() {
            return false;
          }
   }
-//add mouseover event to each piece
-  // function adds the class if its moveable
-  //function allows piece to move if moveable
 }
