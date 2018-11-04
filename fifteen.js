@@ -1,6 +1,7 @@
 window.onload = function() {
   const pieces = document.querySelectorAll('#puzzlearea div');
   const shuffleBtn = document.querySelector('#shufflebutton');
+  const puzzle = document.querySelector('#puzzlearea');
 
   let empty = {
     top: 300,
@@ -12,7 +13,6 @@ window.onload = function() {
   //**************************************************/
   
   setup();
-  layoutGrid();
 
   pieces.forEach(p => {
     p.classList.add('puzzlepiece');
@@ -22,55 +22,19 @@ window.onload = function() {
   
   //**************************************************/
 
-  
-  //space them out
   function setup() {
     // console.log("called setup");
     let p = 0
     for (let y = 0; y < 400; y+=100) {
-      for (let x = 0; x < 400; x+=100) {
-        // pieces[p].style.top = `${y}px`;
-        // pieces[p].style.left = `${x}px`;
-        //portioning the image
-        // pieces[p].style.backgroundPosition = `-${x}px -${y}px`;
+      for (let x = 0; x < 400; x+=100) {    
         if (p < pieces.length) {
-          pieces[p].dataset.x = x; 
-          pieces[p].dataset.y = y; 
-          
+          pieces[p].style.top = `${y}px`;
+          pieces[p].style.left = `${x}px`; 
+          pieces[p].style.backgroundPosition = `-${x}px -${y}px`;
         }
-        // grid[y/100][x/100] = pieces[p];
         p++;
-
-        // let x = 0;
-        // let y= 0;
-        // let count = 0;
-        // for (let i=0; i<pieces.length; i++) {
-        //   pieces[i].style.top = `${y}px`;
-        //   pieces[i].style.left = `${x}px`;
-          
-        //   x +=100;
-        //   count+=1;
-        //   if (count%4) {
-        //     x = 0;
-        //     y+= 100;
-        //   }
-        // }
-
-
-
       }    
     }
-  }
-
-  function layoutGrid() {
-    // console.log('called layoutGrid');
-    pieces.forEach(p => {
-      let x = p.dataset.x;
-      let y = p.dataset.y;
-      p.style.left = x +'px';
-      p.style.top = y +'px';
-      p.style.backgroundPosition = `-${x}px -${y}px`;
-    });
   }
 
   function shuffle() {
@@ -78,6 +42,9 @@ window.onload = function() {
       let index = Math.floor(Math.random() * 14);
       move(pieces[index]);
     }
+    start();
+    setInterval(end,1000);
+
   }
 
   function ifMovable(e) {
@@ -90,7 +57,6 @@ window.onload = function() {
         this.removeEventListener('click', movePiece);
       }
     }
-    //for debugging
     // console.log(`${e.target.textContent} is ${nextToBlank(this)}`);
   }
 
@@ -149,4 +115,34 @@ window.onload = function() {
            return false;
          }
   }
+
+  const timeArea = document.createElement('div');
+  timeArea.innerHTML = `
+  <h1>Your Time</h1>
+  <h3 id="time"></h3>`;
+  timeArea.style.position = 'absolute';
+  timeArea.style.left = '450px';
+  puzzle.appendChild(timeArea);
+
+  const time = document.querySelector('#time');
+
+  let startTime, endTime;
+
+  function start() {
+    startTime = new Date();
+  };
+
+  function end() {
+    endTime = new Date();
+    let timeDiff = endTime - startTime; //in ms
+    // strip the ms
+    timeDiff /= 1000;
+
+    // get seconds 
+    var seconds = Math.round(timeDiff);
+    time.textContent = `${seconds}s`;
+  }
+
+  
+
 }
