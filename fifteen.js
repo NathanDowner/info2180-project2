@@ -2,11 +2,14 @@ window.onload = function() {
   const pieces = document.querySelectorAll('#puzzlearea div');
   const shuffleBtn = document.querySelector('#shufflebutton');
   const puzzle = document.querySelector('#puzzlearea');
+  let startTime, endTime;
 
   let empty = {
     top: 300,
     left: 300
   }
+
+  let moveCount = 0;
 
   //add the puzzlepiece class to divs
 
@@ -97,6 +100,7 @@ window.onload = function() {
     setLeft(this,empty.left);
     empty.top = top;
     empty.left = left;
+    updateMoves();
     // console.log(`empty top is: ${empty.top} \n empty left is: ${empty.left}`);
     this.removeEventListener('click', movePiece);
     this.classList.toggle('movablepiece');
@@ -118,15 +122,22 @@ window.onload = function() {
 
   const timeArea = document.createElement('div');
   timeArea.innerHTML = `
-  <h1>Your Time</h1>
-  <h3 id="time"></h3>`;
+  <h4 style="margin-bottom:2px;">Your Time:</h4>
+  <p id="time" style="margin:0;"></p><br>
+  <h4 style="margin-top:10px; margin-bottom:0;">Number of moves:</h4>
+  <p id="moves" style="margin:0;"></p>`;
   timeArea.style.position = 'absolute';
   timeArea.style.left = '450px';
   puzzle.appendChild(timeArea);
 
   const time = document.querySelector('#time');
+  const moves = document.querySelector('#moves');
+  moves.textContent = moveCount;
 
-  let startTime, endTime;
+  function updateMoves() {
+    moveCount++;
+    moves.textContent = moveCount;
+  }
 
   function start() {
     startTime = new Date();
@@ -142,7 +153,4 @@ window.onload = function() {
     var seconds = Math.round(timeDiff);
     time.textContent = `${seconds}s`;
   }
-
-  
-
 }
