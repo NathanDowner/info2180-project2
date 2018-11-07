@@ -1,3 +1,5 @@
+
+//***/The extra feature I'm submitting is the end game celebration***//
 window.onload = function() {
   const pieces = document.querySelectorAll('#puzzlearea div');
   const shuffleBtn = document.querySelector('#shufflebutton');
@@ -75,8 +77,6 @@ window.onload = function() {
   }
 
   function shuffle() {
-    // clearInterval();
-    
     moveCount = 0;
     moves.textContent= 0;
     for (let i = 0; i < 100; i++) {
