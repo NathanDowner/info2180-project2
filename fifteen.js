@@ -32,21 +32,59 @@ window.onload = function() {
       for (let x = 0; x < 400; x+=100) {    
         if (p < pieces.length) {
           pieces[p].style.top = `${y}px`;
+          pieces[p].dataset.top = y;
           pieces[p].style.left = `${x}px`; 
+          pieces[p].dataset.left = x; 
           pieces[p].style.backgroundPosition = `-${x}px -${y}px`;
         }
         p++;
       }    
     }
   }
+  function celebrate() {
+    // pieces.forEach(p => p.style.background = '0');
+    // clearInterval(timer);
+    const ending = document.createElement('h1');
+    ending.textContent = 'You Win!';
+    ending.style.position = 'absolute';
+    ending.style.top = '50%';
+    ending.style.left = '50%';
+    ending.style.transform = 'translate(-50%,-50%)';
+    ending.classList.add('movablepiece');
+    puzzle.appendChild(ending);
+    
+    let state = false;
+    let flashing = setInterval(function () {
+      state = !state;
+      ending.style.color = state? "red": "green";
+    }, 500);
+  }
+
+  function didWin(piece) {
+    if(rightPos(piece)) {
+      for (let i = 0; i < pieces.length; i++) {
+        if (rightPos(pieces[i])){
+        } else {
+          return false;
+        }
+      }
+      return true;
+    } else {
+      return  false;
+    }
+  }
 
   function shuffle() {
+    // clearInterval();
+    
+    moveCount = 0;
+    moves.textContent= 0;
     for (let i = 0; i < 100; i++) {
       let index = Math.floor(Math.random() * 14);
       move(pieces[index]);
     }
     start();
-    setInterval(end,1000);
+   let timer = setInterval(end,1000);
 
   }
 
@@ -79,6 +117,14 @@ window.onload = function() {
     piece.style.left = `${val}px`;
   }
 
+  function rightPos(piece) {
+    // console.log(`type of getLeft ${ typeof getLeft(piece)} and typeof ${typeof piece.dataset.left}`);
+    if  (`${getLeft(piece)}` === piece.dataset.left && `${getTop(piece)}` === piece.dataset.top)
+      return true;
+    else
+      return false;
+  }
+
   function move(piece) {
     // console.log("Called movePiece.");
     let top = getTop(piece);
@@ -100,8 +146,9 @@ window.onload = function() {
     setLeft(this,empty.left);
     empty.top = top;
     empty.left = left;
-    updateMoves();
-    // console.log(`empty top is: ${empty.top} \n empty left is: ${empty.left}`);
+    updateMoves();    
+    if (didWin(this))
+      celebrate();
     this.removeEventListener('click', movePiece);
     this.classList.toggle('movablepiece');
   }
