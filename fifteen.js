@@ -1,15 +1,25 @@
 
 //***/The extra feature I'm submitting is the end game celebration***//
+//Other features included:
+//    ** move count
+//    ** game timer
+//    ** piece transitions
 window.onload = function() {
   const pieces = document.querySelectorAll('#puzzlearea div');
   const shuffleBtn = document.querySelector('#shufflebutton');
   const puzzle = document.querySelector('#puzzlearea');
   let startTime, endTime;
+  let gameFin = false;
 
   let empty = {
     top: 300,
     left: 300
   }
+
+  setInterval(function() {
+    if (gameFin === true)
+      clearInterval(timer);
+  }, 1000)
 
   let moveCount = 0;
 
@@ -52,7 +62,7 @@ window.onload = function() {
     ending.style.top = '50%';
     ending.style.left = '50%';
     ending.style.transform = 'translate(-50%,-50%)';
-    ending.classList.add('movablepiece');
+    // ending.classList.add('movablepiece');
     puzzle.appendChild(ending);
     
     let state = false;
@@ -75,7 +85,7 @@ window.onload = function() {
       return  false;
     }
   }
-
+  let timer;
   function shuffle() {
     moveCount = 0;
     moves.textContent= 0;
@@ -84,8 +94,7 @@ window.onload = function() {
       move(pieces[index]);
     }
     start();
-   let timer = setInterval(end,1000);
-
+    timer = setInterval(end,1000);
   }
 
   function ifMovable(e) {
