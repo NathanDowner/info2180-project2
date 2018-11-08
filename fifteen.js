@@ -126,6 +126,7 @@ window.onload = function() {
   }
 
   function move(piece) {
+    piece.style.transition = 'left 0.25s , top 0.25s';
     // console.log("Called movePiece.");
     let top = getTop(piece);
     let left = getLeft(piece);
@@ -140,6 +141,8 @@ window.onload = function() {
 
   function movePiece() {
     // console.log("Called movePiece.");
+    //transition
+    this.style.transition = 'left 0.25s , top 0.25s';
     let top = getTop(this);
     let left = getLeft(this);
     setTop(this,empty.top);
